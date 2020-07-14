@@ -1,5 +1,7 @@
 import bpy, bmesh, random, mathutils
-BOTTLE_SHAPES: ['circle', 'square']
+
+BOTTLE_SHAPES = ['circle', 'square']
+
 
 def build_bottle():
     shape = random.choice(BOTTLE_SHAPES)
@@ -7,18 +9,21 @@ def build_bottle():
         bpy.ops.mesh.primitive_circle_add(radius=1,
                                           enter_editmode=False,
                                           location=(0, 0, 0))
+        bpy.ops.object.shade_smooth()
+        bpy.ops.object.modifier_add(type='SUBSURF')
+        bpy.context.object.modifiers["Subdivision"].render_levels = 6
+        bpy.context.object.modifiers["Subdivision"].levels = 6
+
     elif shape == 'square':
         bpy.ops.mesh.primitive_plane_add(enter_editmode=False, align='WORLD', location=(0, 0, 0))
         bpy.ops.object.modifier_add(type='BEVEL')
         bpy.context.object.modifiers["Bevel"].segments = 6
-
-    bottle_shell = bpy.context.active_object
-    bpy.ops.object.shade_smooth()
-
-    bpy.ops.object.modifier_add(type='SUBSURF')
-    bpy.context.object.modifiers["Subdivision"].render_levels = 5
-    bpy.context.object.modifiers["Subdivision"].levels = 5
-    bpy.context.object.modifiers["Subdivision"].subdivision_type = 'SIMPLE'
+        bottle_shell = bpy.context.active_object
+        bpy.ops.object.shade_smooth()
+        bpy.ops.object.modifier_add(type='SUBSURF')
+        bpy.context.object.modifiers["Subdivision"].render_levels = 6
+        bpy.context.object.modifiers["Subdivision"].levels = 6
+        bpy.context.object.modifiers["Subdivision"].subdivision_type = 'SIMPLE'
 
     body_length = random.uniform(1, 7)
     body_taper = random.uniform(.1, .4)
@@ -151,7 +156,8 @@ def set_up_liquid_shader():
         bpy.data.materials['liquid_xyz'].node_tree.links.new(transparent_bsdf_output, mix_shader_input2)
         bpy.data.materials['liquid_xyz'].node_tree.links.new(mix_shader_output, mat_output_surface_input)
 
-        bpy.data.materials["liquid_xyz"].node_tree.nodes["Glass BSDF"].inputs[0].default_value = (0.39959, 0.000400819, 0, 1)
+        bpy.data.materials["liquid_xyz"].node_tree.nodes["Glass BSDF"].inputs[0].default_value = (
+        0.39959, 0.000400819, 0, 1)
         bpy.data.materials["liquid_xyz"].node_tree.nodes["Glass BSDF"].inputs[2].default_value = 1.333
         bpy.data.materials["liquid_xyz"].node_tree.nodes["Transparent BSDF"].inputs[0].default_value = (
             0.076476, 0.0854893, 0.0803021, 1)
@@ -195,7 +201,7 @@ def set_up_glass_shader():
     bpy.context.object.active_material.use_screen_refraction = True
     bpy.context.object.active_material.use_sss_translucency = True
     bpy.data.materials["glass"].node_tree.nodes["Glass BSDF"].inputs[0].default_value = (
-    0.0880155, 0.0856212, 0.0863521, 1)
+        0.0880155, 0.0856212, 0.0863521, 1)
 
 
 def cleanup_bottom():
