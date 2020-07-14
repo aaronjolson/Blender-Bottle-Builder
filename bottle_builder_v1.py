@@ -9,6 +9,7 @@ def build_bottle():
         bpy.ops.mesh.primitive_circle_add(radius=1,
                                           enter_editmode=False,
                                           location=(0, 0, 0))
+        bottle_shell = bpy.context.active_object
         bpy.ops.object.shade_smooth()
         bpy.ops.object.modifier_add(type='SUBSURF')
         bpy.context.object.modifiers["Subdivision"].render_levels = 6
@@ -21,8 +22,8 @@ def build_bottle():
         bottle_shell = bpy.context.active_object
         bpy.ops.object.shade_smooth()
         bpy.ops.object.modifier_add(type='SUBSURF')
-        bpy.context.object.modifiers["Subdivision"].render_levels = 6
-        bpy.context.object.modifiers["Subdivision"].levels = 6
+        bpy.context.object.modifiers["Subdivision"].render_levels = 5
+        bpy.context.object.modifiers["Subdivision"].levels = 5
         bpy.context.object.modifiers["Subdivision"].subdivision_type = 'SIMPLE'
 
     body_length = random.uniform(1, 7)
