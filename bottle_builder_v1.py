@@ -79,9 +79,8 @@ def build_bottle():
     bpy.context.view_layer.objects.active = liquid
     set_up_liquid_shader()
 
-    # bpy.ops.object.select_all(action='DESELECT')
+    # set bottle as parent object of liquid
     bpy.context.view_layer.objects.active = bottle_shell
-    # bpy.data.objects[bottle_shell.name].select_set(True)
     bpy.data.objects[liquid.name].select_set(True)
     bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
 
@@ -176,10 +175,6 @@ def set_up_glass_shader():
         nodes.remove(node)
     if not bpy.data.materials['glass'].node_tree.nodes.get('Glass BSDF'):
         bpy.data.materials['glass'].node_tree.nodes.new('ShaderNodeBsdfGlass')
-        # bpy.data.materials['glass'].node_tree.nodes["Glass BSDF"]
-        # bpy.data.materials['glass'].node_tree.nodes["Material Output"]
-        # bpy.data.materials['glass'].node_tree.nodes["Glass BSDF"].inputs.keys()
-        # bpy.data.materials['glass'].node_tree.nodes["Glass BSDF"].outputs.keys()
         glass_bsdf_output = bpy.data.materials['glass'].node_tree.nodes["Glass BSDF"].outputs['BSDF']
         mat_output_surface_output = bpy.data.materials['glass'].node_tree.nodes["Material Output"].inputs['Surface']
         bpy.data.materials['glass'].node_tree.links.new(glass_bsdf_output, mat_output_surface_output)
@@ -192,7 +187,6 @@ def set_up_glass_shader():
 
 def cleanup_bottom():
     # look at all of the faces of the cube, find the one that is 'facing' the positive direction on the y axis
-    # bpy.ops.object.mode_set(mode='EDIT')
     mesh = bmesh.from_edit_mesh(bpy.context.object.data)
     bpy.ops.mesh.select_all(action='DESELECT')
     for v in mesh.verts:
