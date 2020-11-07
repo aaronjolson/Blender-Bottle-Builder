@@ -1,5 +1,7 @@
 # Blender-Bottle-Builder
 Sets of scripts for generating procedural 3D bottles done in Blender using Python. 
+Useful demonstration of the basics of how to work with materials in Python as well as switch between 
+active objects when generating multiple.
 
 ![Preview Image 1](bottle-preview.jpg)
 
